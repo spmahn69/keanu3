@@ -1,0 +1,287 @@
+html
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>텍스트 문서 보기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border: 1px solid #ccc;
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>keanu_3</h1>
+    <pre id="textContent">
+1. scikit-learn 패키지는 머신러닝 교육을 위한 최고의 파이썬 패키지입니다.
+scikit-learn를 별칭(alias) sk로 임포트하는 코드를 작성하고 실행하세요.
+
+!pip install pandas
+import sklearn as sk
+
+2. Pandas는 데이터 분석을 위해 널리 사용되는 파이썬 라이브러리입니다.
+Pandas를 사용할 수 있도록 별칭(alias)을 pd로 해서 불러오세요.¶
+
+import pandas as pd
+
+3. 모델링을 위해 분석 및 처리할 데이터 파일을 읽어오려고 합니다.
+Pandas함수로 2개 데이터 파일을 읽고 합쳐서 1개의 데이터프레임 변수명 df에 할당하는 코드를 작성하세요.
+A0007IT.json 파일을 읽어 데이터 프레임 변수명 df_a에 할당하세요.
+signal.csv 파일을 읽어 데이터 프레임 변수명 df_b에 할당하세요.
+df_a와 df_b 데이터프레임을 판다스의 merge 함수를 활용하여 합쳐 데이터프레임 변수명 df에 저장하세요.
+합칠때 사용하는 키(on) : 'RID'
+합치는 방법(how) : 'inner'
+
+df_a=pd.read_json('A0007IT.json')
+df_b=pd.read_csv('signal.csv')
+
+df=pd.merge(df_a, df_b, on='RID', how='inner')
+
+df_a
+df_b
+df
+
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+plt.rc('font', family='NanumGothicCoding')
+
+
+4. Address1(주소1)에 대한 분포도를 알아 보려고 합니다.
+Address1(주소1)에 대해 countplot그래프로 만드는 코드와 답안을 작성하세요.
+Seaborn을 활용하세요.
+첫번째, Address1(주소1)에 대해서 분포를 보여주는 countplot 그래프 그리세요.
+두번째, 지역명이 없는 '-' 에 해당되는 row(행)을 삭제하세요.
+출력된 그래프를 보고 해석한 것으로 옳지 않은 선택지를 아래에서 골라 '답안04' 변수에 저장하세요.(예. 답안04 = 4)
+Countplot 그래프에서 Address1(주소1) 분포를 확인시 '경기도' 분포가 제일 크다.
+Address1(주소1) 분포를 보면 '인천광역시' 보다 '서울특별시'가 더 크다.
+지역명이 없는 '-' 에 해당되는 row(행)가 2개 있다.
+
+import seaborn as sns
+sns.countplot(x='Address1',data=df)
+plt.show()
+
+# hyphen=df['Address1'].str.count('-').sum()
+# hyphen
+
+df=df[df[Address1'] !='-']
+df
+
+답안04=3
+답안04
+
+
+5.실주행시간과 평균시속의 분포 확인
+
+-Time_Driving(실주행시간)과 Speed_Per_Hour(평균시속)을 jointplot 그래프 그리기
+-Seaborn을 활용
+-X축에는 Time_Driving(실주행시간)을 표시하고 Y축에는 Speed_Per_Hour(평균시속)을 표시
+
+sns.jointplot(data=df, x='Time_Driving',y='Speed_Per_Hour')
+plt.show()
+
+
+6. jointplot 그래프에서 발견한 이상치 1개를 삭제
+-대상 데이터프레임: df
+-jointplot 그래프를 보고 시속 300 이상되는 이상치를 찾아 해당 행(Row)을 삭제하세요.
+-불필요한 'RID' 컬럼을 삭제하시오
+-전처리 반영 후에 새로운 데이터프레임 변수명 df_temp에 저장하세요.
+
+df_temp = df[df['Speed_Per_Hour'] < 300]
+df_temp=df_temp.drop('RID', axis=1)
+df_temp
+
+또는 
+df_temp = df.drop(df[df['Speed_Per_Hour'] >= 300].index)
+df_temp=df_temp.drop('RID', axis=1)
+df_temp
+
+
+7. 가이드에 따른 결측치 제거
+-대상 데이터프레임: df_temp
+-결측치를 확인하는 코드를 작성
+-결측치가 있는 행(row)를 삭제
+-전처리 반영된 결과를 새로운 데이터프레임 변수명 df_na에 저장
+
+df_temp.isna().sum()    # df_temp.isnull().sum() 과 동일
+df_na=df_temp.dropna(axis=0)
+# df_na
+# df_na.isna().sum()
+답안07=2
+답안07
+
+
+8. 불필요한 변수 삭제
+대상 데이터프레임: df_na
+'Time_Departure', 'Time_Arrival' 2개 컬럼을 삭제
+전처리 반영된 결과를 새로운 데이터프레임 변수명 df_del에 저장
+
+df_del = df_na.drop(['Time_Departure','Time_Arrival'], axis=1)
+# df_del
+
+또는
+df_del=df_na.drop(['Time_Departure'],axis=1)
+df_del=df_del.drop(['Time_Arrival'],axis=1)
+df_del
+
+
+9. 조건에 해당하는 컬럼 원핫인코딩
+-대상 데이터프레임: df_del
+-원-핫 인코딩 대상: object 타입의 전체 컬럼
+-활용 함수: pandas의 get_dummies
+-해당 전처리가 반영된 결과를 데이터프레임 변수 df_preset에 저장
+
+cols=df_del.select_dtypes('object').columns
+df_preset=pd.get_dummies(data=df_del, columns=cols)
+# df_preset
+
+
+10. Time Drivimg 칼럼을 훈련, 검증 데이터셋 분리
+-대상 데이터프레임: df_preset
+-훈련 데이터셋 label: y_train, 훈련 데이터셋 Feature: X_train
+-검증 데이터셋 label: y_valid, 검증 데이터셋 Feature: X_valid
+-훈련 데이터셋과 검증데이터셋 비율은 80:20
+-random_state: 42
+-Scikit-learn의 train_test_split 함수를 활용하세요.
+
+- RobustScaler 스케일링 수행
+  sklearn.preprocessing의 RobustScaler 함수 사용
+  훈련데이터의 Feature는 RobustScaler의 fit_transform함수 활용하여 X_train 변수로 할당
+  검증데이터의 Feature는 RobustScaler의 transform함수 활용하여 X_test 변수로 할당
+
+from sklearn.model_selection import train_test_split
+x=df_preset.drop('Time_Driving',axis=1)
+y=df_preset['Time_Driving']
+
+X_train, X_valid, y_train, y_valid=train_test_split(x,y, test_size=0.2, random_state=42)
+
+
+from sklearn.preprocessing import RobustScaler
+rs=RobustScaler()
+X_train=rs.fit_transform(X_train)
+X_test=rs.transform(X_valid)
+
+
+11. Time_driving 예측하는 머신러닝모델 생성하기 
+-의사결정나무(decision tree)
+  .트리의 최대 깊이 : 5로 설정
+  .노드를 분할하기 위한 최소한의 샘플 데이터수(min_samples_split) : 3으로 설정
+  .random_state : 120으로 설정
+  .의사결정나무(decision tree) 모델을 dt변수에 저장해 주세요
+-랜덤포레스트(RandomForest)
+  .트리의 최대 깊이 : 5로 설정
+  .노드를 분할하기 위한 최소한의 샘플 데이터수(min_samples_split) : 3으로 설정
+  .random_state : 120으로 설정
+  .랜덤포레스트(RandomForest) 모델을 rf변수에 저장해 주세요
+-의 2개의 모델에 대해 fit을 활용해 모델을 학습해 주세요. 학습시 훈련데이터 셋을 활용해 주세요
+
+
+from sklearn.tree import DecisionTreeRegressor #분류일경우 Regressor 대신 Classifier 로 바꿔주기 
+from sklearn.ensemble import RandomForestRegressor #분류일경우 Regressor 대신 Classifier 로 바꿔주기
+dt = DecisionTreeRegressor(max_depth=5, min_samples_split=3, random_state=120)  #분류일경우 Regressor 대신 Classifier 
+rf = RandomForestRegressor(max_depth = 5, min_samples_split=3, random_state=120) #분류일경우 Regressor 대신 Classifier 
+dt.fit(X_train, y_train) #decisiontree 학습시키기(학습은 항상 train 데이터 세트로!)
+rf.fit(X_train, y_train) #randomforest 학습시키기(학습은 항상 train 데이터 세트로!)
+
+​
+
+12.위 의사결정나무(decision tree)와 랜텀포레스트(Random Forest) 모델의 성능평가 \
+ma(Mean Absolute Error) 를 구하고 평가하세요
+mae,mse,accuray 등등) 구하기, 평가지표 점수 출력하기 
+-성능 평가는 검증 데이터셋을 활용
+-11번 문제에서 만든 의사결정나무(decision tree) 모델로 y값을 예측(predict)하여 y_pred_dt에 저장
+-검증 정답(y_valid)과 예측값(y_pred_dt)의 mae(Mean Absolute Error)를 구하고 dt_mae 변수에 저장
+-11번 문제에서 만든 랜텀포레스트(Random Forest)  모델로 y값을 예측(predict)하여 y_pred_rf에 저장
+-검증 정답(y_valid)과 예측값(y_pred_rf)의 mae(Mean Absolute Error)를 구하고 rf_mae 변수에 저장
+- 2개의 모델에 대한 mae 성능평가 결과를 확인하여 성능총ㅎ은 모델 이름을 '답안12'qustndp wjwkdgktpdy
+  (예) 답안12='decisiontree' 또는 답안12='randomforest' 
+
+
+from sklearn.metrics import mean_absolute_error #metrics가 평가지표를 구하겠다는 의미 
+
+y_pred_dt = dt.predict(X_valid)
+dt_mae = mean_absolute_error(y_valid, y_pred_dt)
+y_pred_rf= rf.predict(X_valid)
+rf_mae = mean_absolute_error(y_valid, y_pred_rf)
+
+print(dt_mae)
+print(rf_mae)
+
+답안12='randomforest'
+답안12
+
+#(회귀)mae, mse,rmse : 값이 낮을수록 좋다
+#(회귀)R2 score : 값이 1에 가까울수록 좋다
+#(분류)accuracy, precision, f1-score, recall : 값이 클수록 좋다
+
+
+
+13. Time_Driving(실주행시간)을 예측하는 딥러닝 모델을 만들기
+딥러닝 입력층, 은닉층, 출력층 세팅하기 , 딥러닝 모델 컴파일하기, 딥러닝 모델 학습하기
+-Tensoflow framework를 사용하여 딥러닝 모델 구현
+-히든레이어(hidden layer) 2개이상으로 모델을 구성
+-dropout 비율 0.2로 Dropout 레이어 1개를 추가
+-손실함수는 MSE(Mean Squared Error)를 사용
+-하이퍼파라미터 epochs: 30, batch_size: 16으로 설정
+-각 에포크마다 loss와 metrics 평가하기 위한 데이터로 X_valid, y_valid 사용
+-학습정보는 history 변수에 저장
+
+
+model = Sequential()
+#model.add(Dense(128, input_shape=(80,), activation='relu'))
+model.add(Dense(128, input_shape=(X_train.shape[1],), activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(1)) #출력층의 경우 별도 언급 없다면 activation 사용 안해도 무관(이진분류의 경우 sigmoid / 다중분류일 경우 softmax)
+
+model.compile(optimizer='adam', loss='mse', metrics='mse')
+history = model.fit(X_train, y_train, epochs=30, batch_size=16, validation_data=(X_valid, y_valid))
+
+14. 딥러닝 모델 평가지표 기반으로 그래프 그리기
+-Matplotlib 라이브러리 활용해서 학습 mse와 검증 mse를 그래프로 표시
+-1개의 그래프에 학습 mse과 검증 mse 2가지를 모두 표시
+-위 2가지 각각의 범례를 'mse', 'val_mse'로 표시
+-그래프의 타이틀은 'Model MSE'로 표시
+-X축에는 'Epochs'라고 표시하고 Y축에는 'MSE'라고 표시
+
+
+
+plt.plot(history.history['mse'])
+plt.plot(history.history['val_mse'])
+plt.legend(['mse','val_mse'])
+plt.title('Model MSE')
+plt.xlabel('Epochs')
+plt.ylabel('Mse')
+
+#(회귀)mae, mse,rmse : 값이 낮을수록 좋다
+#(회귀)R2 score : 값이 1에 가까울수록 좋다
+#(분류)accuracy, precision, f1-score, recall : 값이 클수록 좋다
+
+
+
+
+    </pre>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
